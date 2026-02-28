@@ -1,48 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}Panel de Control - {{ username }}{% endblock %}
-
 {% block content %}
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>Hola, {{ username }}! 🏅</h1>
-        <a href="{{ url_for('nuevo_post') }}" class="btn" style="background-color: #27ae60;">+ Añadir Deporte</a>
+    <h1>Panel de Control: {{ username }}</h1>
+    <div style="text-align: center; margin-bottom: 30px;">
+        <a href="{{ url_for('nuevo_post') }}" class="btn">✍️ Nueva Reseña</a>
     </div>
-
-    <p>Desde aquí puedes gestionar tus publicaciones deportivas y ver tu actividad.</p>
-    
-    <hr>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-          {% for message in messages %}
-            {{ message }}
-          {% endfor %}
-        </div>
+        {% for message in messages %}
+          <p style="color: #d4af37; text-align: center;">{{ message }}</p>
+        {% endfor %}
       {% endif %}
     {% endwith %}
 
-    <h3>📋 Mis Aportaciones Deportivas</h3>
-
+    <h3>🍿 Tus Críticas Publicadas</h3>
     {% if posts %}
-        <div class="posts-container">
-            {% for post in posts %}
-                <div style="background: #f9f9f9; border-left: 5px solid #2c3e50; padding: 15px; margin-bottom: 15px; border-radius: 0 8px 8px 0; shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <h4 style="margin-top: 0; color: #e74c3c;">{{ post.titulo }}</h4>
-                    <p style="color: #555;">{{ post.contenido }}</p>
-                </div>
-            {% endfor %}
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for post in posts %}
+            <div style="background: #252525; padding: 20px; border-radius: 8px; border-left: 4px solid var(--gold);">
+                <h4 style="margin: 0; color: var(--gold);">{{ post.titulo }}</h4>
+                <p style="color: #bbb; font-size: 0.9rem;">{{ post.contenido }}</p>
+                
+                <form action="{{ url_for('borrar_post', post_id=post.id) }}" method="POST" style="margin-top: 10px;">
+                    <button type="submit" class="btn-delete" onclick="return confirm('¿Seguro que quieres borrar esta crítica?')">
+                        <i class="fas fa-trash"></i> Eliminar reseña
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
         </div>
     {% else %}
-        <div style="text-align: center; padding: 40px; background: #eee; border-radius: 10px;">
-            <p>Aún no has publicado nada. ¡Anímate a compartir tu primer deporte!</p>
-            <a href="{{ url_for('nuevo_post') }}">Haz clic aquí para empezar</a>
-        </div>
+        <p style="text-align: center;">No has escrito nada todavía.</p>
     {% endif %}
-
-    <br>
-    <hr>
-    <div style="margin-top: 20px;">
-        <a href="{{ url_for('logout') }}" style="color: #c0392b; font-weight: bold; text-decoration: none;">× Cerrar sesión segura</a>
-    </div>
 {% endblock %}

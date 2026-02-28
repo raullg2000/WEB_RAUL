@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Añadir contenido deportivo</h2>
+    <h2>Escribir Crítica Cinematográfica</h2>
     <form method="POST">
-        <label>Título del deporte/noticia:</label><br>
-        <input type="text" name="titulo" required><br><br>
-        <label>Descripción:</label><br>
-        <textarea name="contenido" rows="5" required></textarea><br><br>
-        <button type="submit" class="btn">Publicar ahora</button>
+        <label>Película:</label>
+        <input type="text" name="titulo" placeholder="Ej: Terminator 2" required>
+        <br><br>
+        <label>Tu Opinión:</label>
+        <textarea name="contenido" rows="6" placeholder="¿Qué te pareció?" required></textarea>
+        <br><br>
+        <div style="text-align: center;">
+            <button type="submit" class="btn">Publicar en el Periódico</button>
+        </div>
     </form>
 {% endblock %}
