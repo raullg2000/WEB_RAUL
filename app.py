@@ -20,12 +20,12 @@ PELICULAS_INFO = {
     'Pulp Fiction': {
         'titulo': 'Pulp Fiction',
         'sinopsis': 'Vidas de criminales, boxeadores y gánsteres se entrelazan en una serie de incidentes violentos e inesperados en Los Ángeles.',
-        'img': 'https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjI4XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg'
+        'img': 'https://images.justwatch.com/poster/206713994/s166/pulp-fiction.avif'
     },
     'Karate Kid': {
         'titulo': 'The Karate Kid',
         'sinopsis': 'Un adolescente aprende artes marciales de la mano de un sabio maestro japonés para defenderse de unos acosadores.',
-        'img': 'https://m.media-amazon.com/images/M/MV5BNTkzY2YzNmYtY2ViMS00MThiLWI5NDItY2NmNjZiNTY3YjVlXkEyXkFqcGdeQXVyNjE5MjUyOTM@._V1_.jpg'
+        'img': 'https://images.justwatch.com/poster/322155006/s166/karate-kid-el-momento-de-la-verdad.avif'
     },
     'El Padrino': {
         'titulo': 'El Padrino',
@@ -45,7 +45,7 @@ PELICULAS_INFO = {
     'Terminator': {
         'titulo': 'The Terminator',
         'sinopsis': 'Un cyborg asesino viaja desde el futuro para matar a Sarah Connor, cuyo hijo no nacido será la clave de la resistencia.',
-        'img': 'https://m.media-amazon.com/images/M/MV5BYTViYTE3ZGQtNDFmMS00MDZmLTlmY2ItN2RkYTA0OTM2NTcyXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg'
+        'img': 'https://images.justwatch.com/poster/249655215/s166/terminator.avif'
     }
 }
 
