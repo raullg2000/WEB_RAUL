@@ -1,80 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>🎬 Cartelera de Películas Míticas</h1>
-    <p style="text-align:center">Haz clic en un cartel para ver su sinopsis y críticas.</p>
-    
-    <div class="cartelera-grid">
-        <a href="{{ url_for('detalle_pelicula', nombre='Kill Bill') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://m.media-amazon.com/images/M/MV5BNzM3NDFhYTAtYmU5Mi00NGRmLTljYjgtMDkyODQ4MjNkMGY2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg" alt="Kill Bill">
-                <h3>Kill Bill: Vol. 1 (2003)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Regreso al Futuro') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg" alt="Regreso al Futuro">
-                <h3>Regreso al Futuro (1985)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Pulp Fiction') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://images.justwatch.com/poster/206713994/s166/pulp-fiction.avif">
-                <h3>Pulp Fiction (1994)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Karate Kid') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://images.justwatch.com/poster/322155006/s166/karate-kid-el-momento-de-la-verdad.avif">
-                <h3>The Karate Kid (1984)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='El Padrino') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg" alt="El Padrino">
-                <h3>El Padrino (1972)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Star Wars') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://m.media-amazon.com/images/I/81P3lDJbjCL._AC_UF1000,1000_QL80_.jpg" alt="Star Wars">
-                <h3>Star Wars: Episodio IV (1977)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Jurassic Park') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://m.media-amazon.com/images/M/MV5BMjM2MDgxMDg0Nl5BMl5BanBnXkFtZTgwNTM2OTM5NDE@._V1_.jpg" alt="Jurassic Park">
-                <h3>Jurassic Park (1993)</h3>
-            </div>
-        </a>
-
-        <a href="{{ url_for('detalle_pelicula', nombre='Terminator') }}" style="text-decoration: none;">
-            <div class="movie-card">
-                <img src="https://images.justwatch.com/poster/249655215/s166/terminator.avif">
-                <h3>The Terminator (1984)</h3>
-            </div>
-        </a>
+<div style="display: flex; gap: 40px; margin-top: 30px; align-items: flex-start;">
+    <div style="flex: 1;">
+        <img src="{{ peli.img }}" style="width: 100%; border-radius: 10px; border: 2px solid var(--gold);">
     </div>
+    <div style="flex: 2;">
+        <h1 style="text-align: left; color: var(--gold); margin-top: 0;">{{ peli.titulo }}</h1>
+        
+        <h3 style="border-bottom: 1px solid #444; padding-bottom: 10px;">Sinopsis</h3>
+        <p style="font-size: 1.1rem; line-height: 1.6;">{{ peli.sinopsis }}</p>
+        
+        <a href="{{ url_for('nuevo_post', default_title=peli.titulo) }}" class="btn" style="background: var(--red); margin-top: 10px;">✍️ Escribir reseña sobre esta película</a>
 
-    <br><hr><br>
-    <h2>💬 Últimas críticas de la comunidad</h2>
-    <div style="display: flex; flex-direction: column; gap: 15px;">
-        {% if resenas %}
-            {% for resena in resenas %}
-                <div style="background: #252525; padding: 15px; border-radius: 5px; border-left: 3px solid var(--gold);">
-                    <h4 style="margin: 0; color: var(--gold);">{{ resena.titulo }}</h4>
-                    <p style="margin: 5px 0; font-style: italic;">"{{ resena.contenido }}"</p>
-                    <small style="color: #888;">— Publicado por: <strong>{{ resena.username }}</strong></small>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p style="text-align: center; color: #666;">Aún no hay críticas. ¡Sé el primero!</p>
-        {% endif %}
+        <div style="margin-top: 40px;">
+            <h3>💬 Críticas de usuarios</h3>
+            {% if criticas %}
+                {% for c in criticas %}
+                    <div style="background: #252525; padding: 15px; border-radius: 5px; margin-bottom: 10px; border-left: 3px solid var(--red);">
+                        <p style="margin: 0;">"{{ c.contenido }}"</p>
+                        <small style="color: var(--gold);">— {{ c.username }}</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #888;">Nadie ha escrito una reseña todavía. ¡Sé el primero!</p>
+            {% endif %}
+        </div>
+        <br>
+        <a href="{{ url_for('index') }}" class="btn">⬅ Volver a la cartelera</a>
     </div>
+</div>
 {% endblock %}

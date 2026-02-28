@@ -11,13 +11,13 @@
     <nav>
         <ul>
             <li><a href="{{ url_for('index') }}"><i class="fas fa-film"></i> Cartelera</a></li>
-            <li><a href="{{ url_for('about_me') }}">El Director (Me)</a></li>
+            <li><a href="{{ url_for('about_me') }}">Mis Proyectos</a></li>
             {% if session.get('user_id') %}
-                <li><a href="{{ url_for('dashboard') }}">Mi Butaca</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Mis Reseñas</a></li>
                 <li><a href="{{ url_for('logout') }}">Salir</a></li>
             {% else %}
                 <li><a href="{{ url_for('login') }}">Entrar</a></li>
-                <li><a href="{{ url_for('register') }}">Ticket Nuevo</a></li>
+                <li><a href="{{ url_for('register') }}">Registrarse</a></li>
             {% endif %}
         </ul>
     </nav>
