@@ -1,27 +1,27 @@
 # Proyecto Final: Críticas de Cine - Raúl L.G.
 
-Aplicación web desarrollada con Python (Flask) y MySQL para la gestión de reseñas de cine. Permite a los usuarios interactuar con un catálogo de películas y gestionar sus propias opiniones de forma privada.
+Aplicación web desarrollada con Python (Flask) y MySQL para la gestión de reseñas cinematográficas. Permite a los usuarios registrarse, iniciar sesión y compartir opiniones sobre una selección de películas clásicas.
 
-## Requisitos del Sistema
-* Python 3.12 (WSL2 - Ubuntu).
+## 🚀 Requisitos del Sistema
+* Python 3.12 (Entorno WSL2 - Ubuntu).
 * XAMPP (Servidor MySQL en Windows).
-* Librerías: flask, mysql-connector-python, werkzeug.
+* Librerías necesarias: flask, mysql-connector-python, werkzeug.
 
-## Configuración de la Base de Datos
-1. Crear base de datos "web_raul" en phpMyAdmin.
-2. Importar el archivo "web_raul.sql" incluido.
-3. El archivo app.py conecta con MySQL mediante la IP 172.27.192.1 para comunicar WSL con Windows.
+## 🛠️ Configuración de la Base de Datos
+1. Crear una base de datos llamada "web_raul" en phpMyAdmin.
+2. Importar el archivo "web_raul.sql" adjunto en este repositorio.
+3. Conectividad: El archivo app.py está configurado para conectar con el host de Windows desde WSL2 mediante la IP 172.27.192.1.
 
-## Funcionalidades
-* Registro e Inicio de sesión seguro.
-* Parte pública con cartelera y últimas reseñas.
-* Dashboard privado para crear y borrar reseñas propias.
-* Sección "About Me" con portafolio de proyectos anteriores.
+## 📋 Funcionalidades
+- Parte Pública: Catálogo de películas, detalles y visualización de las últimas reseñas.
+- Parte Privada: Dashboard personal para usuarios registrados donde pueden crear y borrar sus propias críticas.
+- Seguridad: Cifrado de contraseñas y manejo de sesiones.
+- About Me: Portafolio con enlaces a los ejercicios realizados durante el curso.
 
-## Estructura
-* app.py: Lógica y conexión a BD.
-* templates/: HTML con herencia de plantillas.
-* static/: Estilos CSS.
-* web_raul.sql: Base de datos con usuarios y reseñas de prueba.
+## 📁 Estructura
+- app.py: Servidor Flask y lógica de conexión.
+- templates/: Vistas HTML con herencia de plantillas.
+- static/: Estilos CSS y diseño.
+- web_raul.sql: Script de base de datos con estructura y datos de prueba.
 
 Autor: Raúl L.G. - Aplicacions Web 2026
