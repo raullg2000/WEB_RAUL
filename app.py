@@ -60,11 +60,11 @@ PELICULAS_INFO = {
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
+        host="172.27.192.1",  # Esta es la IP que te ha dado tu terminal
         user="root",
         password="",
         database="web_raul",
-        consume_results=True # Evita errores de lectura
+        consume_results=True
     )
 
 @app.route('/')
