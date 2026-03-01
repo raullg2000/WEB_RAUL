@@ -1,47 +1,27 @@
-🎬 Proyecto Final: Críticas de Cine - Raúl L.G.
-Aplicación web desarrollada con Python (Flask) y MySQL para la gestión de reseñas cinematográficas. Este proyecto permite a los usuarios interactuar con un catálogo de películas y gestionar sus propias opiniones de forma privada.
+# Proyecto Final: Críticas de Cine - Raúl L.G.
 
-🚀 Requisitos del Sistema
-Para ejecutar esta aplicación, se han utilizado las siguientes herramientas:
+Aplicación web desarrollada con Python (Flask) y MySQL para la gestión de reseñas de cine. Permite a los usuarios interactuar con un catálogo de películas y gestionar sus propias opiniones de forma privada.
 
-Python 3.12 (Entorno WSL2 - Ubuntu).
+## Requisitos del Sistema
+* Python 3.12 (WSL2 - Ubuntu).
+* XAMPP (Servidor MySQL en Windows).
+* Librerías: flask, mysql-connector-python, werkzeug.
 
-XAMPP v3.3.0 (Servidor MySQL en Windows).
+## Configuración de la Base de Datos
+1. Crear base de datos "web_raul" en phpMyAdmin.
+2. Importar el archivo "web_raul.sql" incluido.
+3. El archivo app.py conecta con MySQL mediante la IP 172.27.192.1 para comunicar WSL con Windows.
 
-Librerías necesarias: flask, mysql-connector-python, werkzeug.
+## Funcionalidades
+* Registro e Inicio de sesión seguro.
+* Parte pública con cartelera y últimas reseñas.
+* Dashboard privado para crear y borrar reseñas propias.
+* Sección "About Me" con portafolio de proyectos anteriores.
 
-🛠️ Configuración de la Base de Datos
-La base de datos se gestiona a través de phpMyAdmin en XAMPP.
+## Estructura
+* app.py: Lógica y conexión a BD.
+* templates/: HTML con herencia de plantillas.
+* static/: Estilos CSS.
+* web_raul.sql: Base de datos con usuarios y reseñas de prueba.
 
-Crear una base de datos llamada web_raul.
-
-Importar el archivo web_raul.sql (incluido en la entrega).
-
-Conectividad: Se ha configurado el archivo app.py para conectar con el host de Windows desde WSL usando la IP 172.27.192.1.
-
-📋 Cumplimiento de Requisitos
-Parte Pública: Visualización de reseñas en el Index, detalle de películas y sección "About Me".
-
-Parte Privada: Acceso restringido al Dashboard mediante Login.
-
-Registro de Usuarios: Sistema de registro con almacenamiento en BD y cifrado de contraseñas.
-
-Base de Datos: Integración total con MySQL para usuarios y reseñas.
-
-Formularios: Registro, Login y "Nueva Reseña".
-
-Herencia de Plantillas: Uso de base.html como plantilla maestra.
-
-About Me: Portafolio con enlaces directos a los ejercicios de clase.
-
-📁 Estructura del Proyecto
-app.py: Lógica del servidor y conexión MySQL.
-
-templates/: Plantillas HTML con herencia.
-
-static/: Estilos CSS.
-
-web_raul.sql: Script de base de datos con datos de prueba.
-
-👤 Autor
-Raúl L.G. - Curso de Aplicacions Web 2026
+Autor: Raúl L.G. - Aplicacions Web 2026
