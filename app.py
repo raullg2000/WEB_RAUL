@@ -3,14 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 
-# Configuración de la conexión
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="web_raul"
-)
-
 app = Flask(__name__)
 app.secret_key = 'hollywood_secret_key'
 
@@ -59,8 +51,11 @@ PELICULAS_INFO = {
 }
 
 def get_db_connection():
+    # USAMOS LA IP QUE DETECTAMOS PARA SALTAR DE WSL A WINDOWS
+    target_ip = "172.27.192.1"
+    print(f"--- Intentando conectar a MySQL en: {target_ip} ---")
     return mysql.connector.connect(
-        host="172.27.192.1",  # Esta es la IP que te ha dado tu terminal
+        host=target_ip,
         user="root",
         password="",
         database="web_raul",
@@ -70,17 +65,13 @@ def get_db_connection():
 @app.route('/')
 def index():
     db = get_db_connection()
-    # Creamos un cursor con dictionary=True para que las reseñas funcionen como antes
     cursor = db.cursor(dictionary=True) 
-    
     cursor.execute('''
         SELECT posts.titulo, posts.contenido, usuarios.username 
         FROM posts JOIN usuarios ON posts.autor_id = usuarios.id 
         ORDER BY posts.id DESC LIMIT 5
     ''')
-    
-    resenas = cursor.fetchall() # Traemos todos los resultados
-    
+    resenas = cursor.fetchall()
     cursor.close()
     db.close()
     return render_template('index.html', resenas=resenas)
@@ -90,13 +81,17 @@ def detalle_pelicula(nombre):
     info = PELICULAS_INFO.get(nombre)
     if not info:
         return "Película no encontrada", 404
+    
     db = get_db_connection()
-    # Buscamos críticas que mencionen el nombre de la peli
-    criticas = db.execute('''
+    cursor = db.cursor(dictionary=True)
+    # MySQL usa %s
+    cursor.execute('''
         SELECT posts.contenido, usuarios.username 
         FROM posts JOIN usuarios ON posts.autor_id = usuarios.id 
-        WHERE posts.titulo LIKE ?
-    ''', ('%' + nombre + '%',)).fetchall()
+        WHERE posts.titulo LIKE %s
+    ''', ('%' + nombre + '%',))
+    criticas = cursor.fetchall()
+    cursor.close()
     db.close()
     return render_template('detalle_pelicula.html', peli=info, criticas=criticas)
 
@@ -112,11 +107,11 @@ def register():
         db = get_db_connection()
         cursor = db.cursor()
         try:
-            # Usamos %s en lugar de ?
             cursor.execute('INSERT INTO usuarios (username, password) VALUES (%s, %s)', (username, password))
-            db.commit() # ¡IMPORTANTE PARA GUARDAR!
+            db.commit()
             return redirect(url_for('login'))
-        except mysql.connector.Error:
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
             flash('Error al registrar: el usuario ya existe.')
         finally:
             cursor.close()
@@ -129,24 +124,33 @@ def login():
         username = request.form['username']
         password = request.form['password']
         db = get_db_connection()
-        user = db.execute('SELECT * FROM usuarios WHERE username = ?', (username,)).fetchone()
+        cursor = db.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM usuarios WHERE username = %s', (username,))
+        user = cursor.fetchone()
+        cursor.close()
         db.close()
+        
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
             session['username'] = user['username']
             return redirect(url_for('dashboard'))
+        else:
+            flash('Usuario o contraseña incorrectos.')
     return render_template('login.html')
 
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session: return redirect(url_for('login'))
     db = get_db_connection()
-    resenas = db.execute('SELECT * FROM posts WHERE autor_id = ?', (session['user_id'],)).fetchall()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM posts WHERE autor_id = %s', (session['user_id'],))
+    resenas = cursor.fetchall()
+    cursor.close()
     db.close()
     return render_template('dashboard.html', username=session['username'], posts=resenas)
 
 @app.route('/nueva-resena', methods=['GET', 'POST'])
-@app.route('/nueva-resena/<default_title>', methods=['GET', 'POST']) # Nueva ruta con título por defecto
+@app.route('/nueva-resena/<default_title>', methods=['GET', 'POST'])
 def nuevo_post(default_title=None):
     if 'user_id' not in session:
         flash('Debes iniciar sesión para escribir una reseña.')
@@ -156,9 +160,11 @@ def nuevo_post(default_title=None):
         titulo = request.form['titulo']
         contenido = request.form['contenido']
         db = get_db_connection()
-        db.execute('INSERT INTO posts (titulo, contenido, autor_id) VALUES (?, ?, ?)', 
-                   (titulo, contenido, session['user_id']))
+        cursor = db.cursor()
+        cursor.execute('INSERT INTO posts (titulo, contenido, autor_id) VALUES (%s, %s, %s)', 
+                       (titulo, contenido, session['user_id']))
         db.commit()
+        cursor.close()
         db.close()
         return redirect(url_for('dashboard'))
     
@@ -167,8 +173,10 @@ def nuevo_post(default_title=None):
 @app.route('/borrar-post/<int:post_id>', methods=['POST'])
 def borrar_post(post_id):
     db = get_db_connection()
-    db.execute('DELETE FROM posts WHERE id = ?', (post_id,))
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM posts WHERE id = %s', (post_id,))
     db.commit()
+    cursor.close()
     db.close()
     return redirect(url_for('dashboard'))
 
