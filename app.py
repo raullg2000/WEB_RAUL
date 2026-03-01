@@ -1,6 +1,15 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+import mysql.connector
+
+# Configuración de la conexión
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="web_raul"
+)
 
 app = Flask(__name__)
 app.secret_key = 'hollywood_secret_key'
@@ -50,18 +59,29 @@ PELICULAS_INFO = {
 }
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="web_raul",
+        consume_results=True # Evita errores de lectura
+    )
 
 @app.route('/')
 def index():
     db = get_db_connection()
-    resenas = db.execute('''
+    # Creamos un cursor con dictionary=True para que las reseñas funcionen como antes
+    cursor = db.cursor(dictionary=True) 
+    
+    cursor.execute('''
         SELECT posts.titulo, posts.contenido, usuarios.username 
         FROM posts JOIN usuarios ON posts.autor_id = usuarios.id 
         ORDER BY posts.id DESC LIMIT 5
-    ''').fetchall()
+    ''')
+    
+    resenas = cursor.fetchall() # Traemos todos los resultados
+    
+    cursor.close()
     db.close()
     return render_template('index.html', resenas=resenas)
 
@@ -90,13 +110,16 @@ def register():
         username = request.form['username']
         password = generate_password_hash(request.form['password'])
         db = get_db_connection()
+        cursor = db.cursor()
         try:
-            db.execute('INSERT INTO usuarios (username, password) VALUES (?, ?)', (username, password))
-            db.commit()
+            # Usamos %s en lugar de ?
+            cursor.execute('INSERT INTO usuarios (username, password) VALUES (%s, %s)', (username, password))
+            db.commit() # ¡IMPORTANTE PARA GUARDAR!
             return redirect(url_for('login'))
-        except sqlite3.IntegrityError:
-            flash('Usuario ya existe.')
+        except mysql.connector.Error:
+            flash('Error al registrar: el usuario ya existe.')
         finally:
+            cursor.close()
             db.close()
     return render_template('registro.html')
 
